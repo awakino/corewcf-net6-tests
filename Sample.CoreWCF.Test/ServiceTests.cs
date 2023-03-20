@@ -1,6 +1,4 @@
-﻿using System.ServiceModel;
-
-namespace Sample.CoreWCF.Test
+﻿namespace Sample.CoreWCF.Test
 {
     public class ServiceTests : IClassFixture<ServiceFixture>
     {

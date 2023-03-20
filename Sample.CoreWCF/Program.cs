@@ -5,7 +5,10 @@
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureWebHostDefaults(builder =>
     {
-        builder.UseKestrel();
+        builder.UseKestrel(options =>
+        {
+            options.AllowSynchronousIO = true;
+        });
         builder.UseStartup<Startup>();
     }).Build();
 
