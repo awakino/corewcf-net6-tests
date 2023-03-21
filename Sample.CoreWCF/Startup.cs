@@ -1,4 +1,6 @@
-﻿namespace Sample.CoreWCF
+﻿using Microsoft.ApplicationInsights;
+
+namespace Sample.CoreWCF
 {
     public class Startup
     {
@@ -43,6 +45,8 @@
             services.AddServiceModelServices();
             services.AddServiceModelMetadata();
             services.AddSingleton<IServiceBehavior, UseRequestHeadersForMetadataAddressBehavior>();
+
+            services.AddApplicationInsightsTelemetry();
         }
     }
 }

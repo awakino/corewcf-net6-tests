@@ -1,14 +1,19 @@
-﻿namespace Sample.CoreWCF.Test
+﻿using Xunit.Abstractions;
+
+namespace Sample.CoreWCF.Test
 {
     public class ServiceTests : IClassFixture<ServiceFixture>
     {
         private readonly ServiceFixture _service;
         private readonly ChannelFactory<IService> _factory;
+        private readonly ITestOutputHelper _output;
 
-        public ServiceTests(ServiceFixture service)
+        public ServiceTests(ServiceFixture service, ITestOutputHelper output)
         {
             _service = service;
+            _output = output;
 
+            _output.WriteLine("Creating ChannelFactory for service...");
             _factory = new ChannelFactory<IService>(
                 new BasicHttpBinding(BasicHttpSecurityMode.Transport),
                 new EndpointAddress(new Uri($"{_service.ServerUri}TestService/Service.svc"))

@@ -29,4 +29,12 @@
     <ProjectReference Include="..\Sample.CoreWCF\Sample.CoreWCF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties xunit_1runner_1json__JsonSchema="https://xunit.net/schema/current/xunit.runner.schema.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
