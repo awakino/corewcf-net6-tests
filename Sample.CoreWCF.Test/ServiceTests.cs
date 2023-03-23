@@ -13,7 +13,6 @@ namespace Sample.CoreWCF.Test
             _service = service;
             _output = output;
 
-            _output.WriteLine("Creating ChannelFactory for service...");
             _factory = new ChannelFactory<IService>(
                 new BasicHttpBinding(BasicHttpSecurityMode.Transport),
                 new EndpointAddress(new Uri($"{_service.ServerUri}TestService/Service.svc"))

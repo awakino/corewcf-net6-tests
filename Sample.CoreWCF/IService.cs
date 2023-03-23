@@ -1,4 +1,6 @@
-﻿namespace Sample.CoreWCF
+﻿using System.ServiceModel;
+
+namespace Sample.CoreWCF
 {
     /// <summary>
     /// Defines the service contract. For the tests to work, we have to use the old

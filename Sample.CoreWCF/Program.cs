@@ -5,10 +5,15 @@
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureWebHostDefaults(builder =>
     {
-        builder.UseKestrel(options =>
+        // use ConfigureKestrel here insead of UseKestrel. This will work both locally
+        // and in Azure because ConfigureWebHostDefaults will figure it out. UseKestrel
+        // overrides that and won't work in Azure. ConfigureKestrel will setup Kestrel 
+        // properly locally, and do nothing when Kestrel isn't being used.
+        builder.ConfigureKestrel(options =>
         {
             options.AllowSynchronousIO = true;
         });
+
         builder.UseStartup<Startup>();
     }).Build();
 

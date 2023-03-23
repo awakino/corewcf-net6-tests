@@ -1,6 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
-
-namespace Sample.CoreWCF
+﻿namespace Sample.CoreWCF
 {
     public class Startup
     {
@@ -23,16 +21,27 @@ namespace Sample.CoreWCF
         /// </summary>
         /// <param name="app">Application Builder</param>
         /// <param name="env">Web Host Environment</param>
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             app.UseServiceModel(serviceBuilder =>
             {
-                serviceBuilder.AddService<Service>();
+                serviceBuilder.AddService<Service>(options =>
+                {
+                    // enable the inclusion of the actual exception detail in service faults
+                    options.DebugBehavior.IncludeExceptionDetailInFaults = env.IsDevelopment();
+                });
+
                 serviceBuilder.AddServiceEndpoint<Service, IService>(
                     new BasicHttpBinding(BasicHttpSecurityMode.Transport),
                     "TestService/Service.svc");
+
+                //serviceBuilder.AddServiceEndpoint<Service, IService>(
+                //    new BasicHttpBinding(BasicHttpSecurityMode.None),
+                //    "TestService/InsecureService.svc");
+
                 var serviceMetadataBehavior = app.ApplicationServices.GetRequiredService<ServiceMetadataBehavior>();
                 serviceMetadataBehavior.HttpsGetEnabled = true;
+                //serviceMetadataBehavior.HttpGetEnabled = true;
             });
         }
 
