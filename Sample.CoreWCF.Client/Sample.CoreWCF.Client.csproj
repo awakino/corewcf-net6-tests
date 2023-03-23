@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Azure.Identity" Version="1.8.2" />
+	<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
 	<PackageReference Include="System.ServiceModel.Primitives" Version="4.10.*" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.*" />
     <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />

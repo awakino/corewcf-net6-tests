@@ -1,13 +1,12 @@
-﻿using Sample.CoreWCF.Client.Proxy;
+﻿using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using Sample.CoreWCF.Client.Proxy;
 using System.ServiceModel;
 
 namespace Sample.CoreWCF.Client
 {
     internal class Program
     {
-        // TODO: Move to configuration
-        private const string APIM_SUBSCRIPTION_KEY = "f83562991d804906803c361e6cc9f069";
-
         static void Main(string[] args)
         {
             Console.WriteLine("Create service client");
@@ -16,7 +15,7 @@ namespace Sample.CoreWCF.Client
                 "https://awakino-apim.azure-api.net/corewcf");
 
             // configure the client to add the APIM Subscription key to the HTTP headers for each request
-            client.Endpoint.EndpointBehaviors.Add(new AddApimHeaderBehaviour(APIM_SUBSCRIPTION_KEY));
+            client.Endpoint.EndpointBehaviors.Add(new AddApimHeaderBehaviour(GetSubscriptionKey()));
 
             Console.WriteLine("Calling basic endpoint...");
             string result = client.GetDataAsync(8).GetAwaiter().GetResult();
@@ -32,6 +31,15 @@ namespace Sample.CoreWCF.Client
 
             Console.WriteLine("Closing remote connection");
             client.Abort();
+        }
+
+        private static string GetSubscriptionKey()
+        {
+            var client = new SecretClient(new Uri("https://awakino-key-vault.vault.azure.net/"), 
+                new DefaultAzureCredential());
+
+            var secret = client.GetSecret("core-wcf-subscription-key");
+            return secret.Value.Value;
         }
     }
 }
