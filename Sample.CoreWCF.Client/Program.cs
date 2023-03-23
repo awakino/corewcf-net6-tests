@@ -7,12 +7,17 @@ namespace Sample.CoreWCF.Client
 {
     internal class Program
     {
+        private static string? _serviceUri;
+
+        private static string? _keyvaultUri;
+
         static void Main(string[] args)
         {
+            ParseArgs(args);
             Console.WriteLine("Create service client");
 
             var client = new ServiceClient(ServiceClient.EndpointConfiguration.BasicHttpBinding_IService,
-                "https://awakino-apim.azure-api.net/corewcf");
+                _serviceUri);
 
             // configure the client to add the APIM Subscription key to the HTTP headers for each request
             client.Endpoint.EndpointBehaviors.Add(new AddApimHeaderBehaviour(GetSubscriptionKey()));
@@ -33,9 +38,38 @@ namespace Sample.CoreWCF.Client
             client.Abort();
         }
 
+        private static void ParseArgs(string[] args)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                switch (args[i])
+                {
+                    case "-v":
+                    case "--vaultUri":
+                        {
+                            _keyvaultUri = args[++i];
+                            break;
+                        }
+                    case "-s":
+                    case "--serviceUri":
+                        {
+                            _serviceUri = args[++i];
+                            break;
+                        }
+                    default:
+                        throw new ApplicationException("Unrecognised command line argument");
+                }
+            }
+
+            if (string.IsNullOrEmpty(_keyvaultUri) || string.IsNullOrEmpty(_serviceUri))
+            {
+                throw new ApplicationException("Required command line arguments not specified");
+            }
+        }
+
         private static string GetSubscriptionKey()
         {
-            var client = new SecretClient(new Uri("https://awakino-key-vault.vault.azure.net/"), 
+            var client = new SecretClient(new Uri(_keyvaultUri), 
                 new DefaultAzureCredential());
 
             var secret = client.GetSecret("core-wcf-subscription-key");
